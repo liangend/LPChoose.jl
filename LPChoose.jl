@@ -62,7 +62,7 @@ function LPChoose(hapblock,budget="unlimited",MAF=0.0;
         A01now           = copy(A01)
         budget_each_step = Int(budget/nsteps)
         
-        # self_define_importance is either false or a vector with length equal to the number of animals
+        # self_define_importance is either false or a vector with length equal to the number of haplotypes
         if self_define_importance == false
             if low_frequency_prefer == false
                 importance       = Matrix(freq'A01now)#get importance of each individual
@@ -70,10 +70,10 @@ function LPChoose(hapblock,budget="unlimited",MAF=0.0;
                 importance = (Matrix(freq'A01now) .- 1).^2  # IWS weights
             end
         else
-            if length(self_define_importance) != nind
-                error("the length of importance has to be equal to the number of animals.")
+            if length(self_define_importance) != size(A01_all)[1]
+                error("the length of importance has to be equal to the number of haplotypes.")
             end
-            importance = self_define_importance
+            importance = Matrix(self_define_importance'A01now)
         end
 
         #Create text files to save output at each step
